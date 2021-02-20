@@ -27,6 +27,18 @@ public:
 
 };
 
+bool contains(vector<pair<Team, Team>> v, pair<Team, Team> t){
+  for(auto t1 : v){
+    if(t1.first.getName() == t.first.getName()
+    || t1.first.getName() == t.second.getName()
+    || t1.second.getName() == t.first.getName()
+    || t1.second.getName() == t.second.getName()){
+      return true;
+    }
+  }
+  return false;
+}
+
 class SLSP{
 public:
   int _T;
@@ -59,7 +71,7 @@ public:
     vector<pair<Team, Team>> v;
 
     for(int i=0; i<_P; i++){
-      v.push_back(make_pair(Team(0), Team(1)));
+      v.push_back(make_pair(Team(-1), Team(-1)));
     }
 
     for(int i=0; i<_W; i++){
@@ -67,15 +79,20 @@ public:
     }
 
 
-    //assigne les au planning
+    //assigne les matchs au planning (contrainte ALLDIFF + WEEK)
     vector<pair<Team,Team>> matchesToAssign = allMatches;
-    vector<pair<Team,Team>> matchesAssigned;
 
-    for(int i=0; i<_schedule.size(); i++){
-      for(int j=0; j<_schedule[i].size(); j++){
-        _schedule[i][j] = matchesToAssign[_P*i + j];
+      int k=0;
+      for(int i=0; i<_schedule.size(); i++){
+        for(int j=0; j<_schedule[i].size(); j++){
+          while(contains(_schedule[i], matchesToAssign[k])){
+            k++;
+          }
+            _schedule[i][j] = matchesToAssign[k];
+            matchesToAssign.erase(matchesToAssign.begin()+k);
+            k=0;
+        }
       }
-    }
 
     // for(auto p : allMatches){
     //   std::cout << p.first.getName() <<"vs" << p.second.getName()<< ' ';
@@ -97,6 +114,5 @@ public:
         std::cout <<"}\n";
     }
   }
-
 
 };
