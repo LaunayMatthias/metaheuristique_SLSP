@@ -196,6 +196,8 @@ public:
         for(int week=0; week<_p._schedule.size(); week++){
           for(int i=0; i<_p._schedule[week].size(); i++){
             for(int j=i+1; j<_p._schedule[week].size(); j++){
+              match1 = _p._schedule[week][i];
+              match2 = _p._schedule[week][j];
               if((_tabuList[match1] + 20 > it) && (_tabuList[match2] + 20 > it)){
                 //if not tabu
                 neighbor = _p.swap(week, i,j);
