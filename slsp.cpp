@@ -110,6 +110,7 @@ public:
 
 
     //affiche le planning
+    std::cout << "Initialisation :" << '\n';
     showSchedule();
   }
 
@@ -186,7 +187,7 @@ public:
       while(maxInterations != it && _p.evaluation() != 0){
         it++;
         int weekchosen = 0;
-        int bestSwap = 10000;
+        int bestNeighbor = 10000;
         pair<Team, Team> match1(make_pair(Team(-1), Team(-1)));
         int p1;
         pair<Team, Team> match2(make_pair(Team(-1), Team(-1)));
@@ -195,12 +196,12 @@ public:
         for(int week=0; week<_p._schedule.size(); week++){
           for(int i=0; i<_p._schedule[week].size(); i++){
             for(int j=i+1; j<_p._schedule[week].size(); j++){
-              if((_tabuList[match1] + 50 > it) && (_tabuList[match2] + 50 > it)){
+              if((_tabuList[match1] + 20 > it) && (_tabuList[match2] + 20 > it)){
                 //if not tabu
                 neighbor = _p.swap(week, i,j);
-                int swapevaluation = neighbor.evaluation();
-                if(swapevaluation < bestSwap){
-                  bestSwap = swapevaluation;
+                int neighbor_evaluation = neighbor.evaluation();
+                if(neighbor_evaluation < bestNeighbor){
+                  bestNeighbor = neighbor_evaluation;
                   match1 = _p._schedule[week][i];
                   p1 = i;
                   match2 = _p._schedule[week][j];
@@ -210,7 +211,6 @@ public:
                   _tabuList[match2] = it;
                 }
               }
-
             }
           }
         }
@@ -231,6 +231,7 @@ public:
       int evaluation = _p.evaluation();
       std::cout << "evaluation: " << evaluation << '\n';
       std::cout << "iterations: " << it << '\n';
-    _p.showSchedule();
+      std::cout << "Résultat :" << '\n';
+      _p.showSchedule();
   }
 };
